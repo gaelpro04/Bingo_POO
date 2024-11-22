@@ -29,6 +29,7 @@ public class TablaTombola {
         }
     }
 
+
     /**
      * Método para mostrar la tabla en consola
      */

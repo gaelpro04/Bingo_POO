@@ -4,8 +4,8 @@ import java.util.HashSet;
 //Clase de una carta de Bingo que se utilizará para herencia
 public class Carta {
 
-    protected int[][] tabla;
-    protected boolean[][] tablaLogica;
+    private int[][] tabla;
+    private boolean[][] tablaLogica;
 
     /**
      * Constructor por preterminado
@@ -20,6 +20,30 @@ public class Carta {
                 tablaLogica[i][j] = true;
             }
         }
+
+        generarNumerosTabla();
+    }
+
+    /**
+     * Método para crear la tabla vacía(servirá para los patrones)
+     * @param vacio
+     */
+    public Carta(boolean vacio)
+    {
+        if (vacio) {
+           tablaLogica = new boolean[5][5];
+
+            for (int i = 0; i < 5; ++i) {
+                for (int j = 0; j < 5; ++j) {
+                    tablaLogica[i][j] = true;
+                }
+            }
+        }
+    }
+
+    public boolean[][] getTablaLogica()
+    {
+        return tablaLogica;
     }
 
     public void mostrarCartaBingo()
@@ -46,13 +70,27 @@ public class Carta {
         }
     }
 
+    public void mostrarCartaLogica()
+    {
+        System.out.println("| B | I | N | G | O |");
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                if (j == 4) {
+                    System.out.print("[ " + tablaLogica[i][j] + " ] \n");
+                } else {
+                    System.out.print("[ " + tablaLogica[i][j] + " ] ");
+                }
+
+            }
+        }
+        System.out.println();
+    }
+
     private void generarNumerosTabla()
     {
         Random numRd = new Random();
         HashSet<Integer> tiraUsados = new HashSet<>();
-        int numero = 0;
-
-
+        int numero;
 
         for (int i = 0; i < 5; ++i) {
             tiraUsados.clear();
@@ -89,7 +127,32 @@ public class Carta {
         }
     }
 
+    /**
+     * Método para ocupar un elemento de la bola sacada de la tombola
+     * @param valorBola
+     */
+    public void ocuparElemento(int valorBola)
+    {
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                if (tablaLogica[i][j] && tabla[i][j] == valorBola) {
+                    tablaLogica[i][j] = false;
+                }
+            }
+        }
+    }
 
+    /**
+     * Método para restablecer la tabla
+     */
+    public void restablecerTabla()
+    {
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                tablaLogica[i][j] = true;
+            }
+        }
+    }
 
 
 }
