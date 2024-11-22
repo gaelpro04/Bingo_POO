@@ -214,6 +214,32 @@ public class CartaPatrones {
             }
         }
 
+        for (int i = 36; i < 38 ; ++i) {
+            boolean[][] cartaLogica = cartaPatrones.get(i).getTablaLogica();
+
+            if (i == 36) {
+                cartaLogica[0][2] = false;
+                cartaLogica[1][1] = false;
+                cartaLogica[1][3] = false;
+                cartaLogica[2][0] = false;
+                cartaLogica[2][4] = false;
+                cartaLogica[3][1] = false;
+                cartaLogica[3][3] = false;
+                cartaLogica[4][2] = false;
+            } else {
+                cartaLogica[1][1] = false;
+                cartaLogica[1][2] = false;
+                cartaLogica[1][3] = false;
+                cartaLogica[2][1] = false;
+                cartaLogica[2][3] = false;
+                cartaLogica[3][1] = false;
+                cartaLogica[3][2] = false;
+                cartaLogica[3][3] = false;
+
+            }
+
+        }
+
         //Patrones especiales
         System.out.println("simon");
     }
@@ -221,6 +247,11 @@ public class CartaPatrones {
     public void mostrarPatron()
     {
         cartaPatrones.forEach(Carta::mostrarCartaLogica);
+    }
+
+    public ArrayList<Carta> getCartaPatrones()
+    {
+        return cartaPatrones;
     }
 
     public static void main(String[] args) {
