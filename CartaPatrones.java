@@ -214,6 +214,7 @@ public class CartaPatrones {
             }
         }
 
+        //Patrones especiales
         for (int i = 36; i < 38 ; ++i) {
             boolean[][] cartaLogica = cartaPatrones.get(i).getTablaLogica();
 
@@ -239,9 +240,6 @@ public class CartaPatrones {
             }
 
         }
-
-        //Patrones especiales
-        System.out.println("simon");
     }
 
     public void mostrarPatron()
@@ -254,7 +252,23 @@ public class CartaPatrones {
         return cartaPatrones;
     }
 
-    public static void main(String[] args) {
+    public int obtenerCantidadFalse(int indice)
+    {
+        boolean[][] cartaPatron = cartaPatrones.get(indice).getTablaLogica();
+        int cantidadElementosFalse = 0;
+        for (int i = 0;i < 5; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                if (!cartaPatron[i][j]) {
+                    ++cantidadElementosFalse;
+                }
+            }
+        }
+        return cantidadElementosFalse;
+    }
+
+
+
+    public static void mai1n(String[] args) {
 
         new CartaPatrones().mostrarPatron();
     }

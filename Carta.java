@@ -142,6 +142,32 @@ public class Carta {
         }
     }
 
+    public boolean contieneElemento(int valorBola)
+    {
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                if (tablaLogica[i][j] && tabla[i][j] == valorBola) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int obtenerCantidadFalses()
+    {
+        int cantidadFalses = 0;
+        for (int i = 0;i < 5; ++i) {
+            for (int j = 0;j < 5; ++j) {
+                if (!tablaLogica[i][j]) {
+                    ++cantidadFalses;
+                }
+            }
+        }
+
+        return cantidadFalses;
+    }
+
     /**
      * Método para restablecer la tabla
      */
