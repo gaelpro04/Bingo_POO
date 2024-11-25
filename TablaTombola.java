@@ -29,6 +29,20 @@ public class TablaTombola {
         }
     }
 
+    /**
+     * Método que regresa la tabla en Object
+     */
+    public Object[][] getTablaString()
+    {
+        Object[][] datos = new Object[5][15];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 15; j++) {
+                datos[i][j] = tabla[i][j];
+            }
+        }
+        return datos;
+    }
+
 
     /**
      * Método para mostrar la tabla en consola

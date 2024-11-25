@@ -17,6 +17,9 @@ public class Carta {
 
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
+                if (i == 2 && j == 2) {
+                    tablaLogica[i][j] = false;
+                }
                 tablaLogica[i][j] = true;
             }
         }
@@ -46,6 +49,22 @@ public class Carta {
         return tablaLogica;
     }
 
+    public int[][] getTablaNumerica()
+    {
+        return tabla;
+    }
+
+    public Object[][] getTablaString()
+    {
+        Object[][] datos = new Object[tabla.length][tabla[0].length];
+        for (int i = 0; i < tabla.length; i++) {
+            for (int j = 0; j < tabla[i].length; j++) {
+                datos[i][j] = tabla[i][j] == 0 ? "FREE" : tabla[i][j];
+            }
+        }
+        return datos;
+    }
+
     public void mostrarCartaBingo()
     {
         System.out.println("| B | I | N | G | O |");
@@ -70,6 +89,7 @@ public class Carta {
         }
     }
 
+
     public void mostrarCartaLogica()
     {
         System.out.println("| B | I | N | G | O |");
@@ -90,7 +110,7 @@ public class Carta {
     {
         Random numRd = new Random();
         HashSet<Integer> tiraUsados = new HashSet<>();
-        int numero;
+        int numero = 0;
 
         for (int i = 0; i < 5; ++i) {
             tiraUsados.clear();
@@ -106,9 +126,14 @@ public class Carta {
                     } while (tiraUsados.contains(numero));
 
                 } else if (i == 2) {
-                    do {
-                        numero = numRd.nextInt(15) + 31;
-                    } while (tiraUsados.contains(numero));
+                    if (j != 2) {
+                        do {
+                            numero = numRd.nextInt(15) + 31;
+                        } while (tiraUsados.contains(numero));
+                    } else {
+                        numero = 0;
+                    }
+
 
                 } else if (i == 3) {
                     do {
@@ -123,6 +148,8 @@ public class Carta {
 
                 tiraUsados.add(numero);
                 tabla[j][i] = numero;
+
+
             }
         }
     }
