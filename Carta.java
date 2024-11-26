@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.util.Objects;
 import java.util.Random;
 import java.util.HashSet;
 
@@ -6,6 +8,9 @@ public class Carta {
 
     private int[][] tabla;
     private boolean[][] tablaLogica;
+    private ImageIcon tablaImagen;
+    private int indiceVacio;
+
 
     /**
      * Constructor por preterminado
@@ -14,6 +19,8 @@ public class Carta {
     {
         tabla = new int[5][5];
         tablaLogica = new boolean[5][5];
+        tablaImagen = null;
+        indiceVacio = -1;
 
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
@@ -23,7 +30,6 @@ public class Carta {
                 tablaLogica[i][j] = true;
             }
         }
-
         generarNumerosTabla();
     }
 
@@ -31,10 +37,12 @@ public class Carta {
      * Método para crear la tabla vacía(servirá para los patrones)
      * @param vacio
      */
-    public Carta(boolean vacio)
+    public Carta(boolean vacio, String rutaImagen, int indiceVacio)
     {
         if (vacio) {
            tablaLogica = new boolean[5][5];
+           tablaImagen = new ImageIcon(Objects.requireNonNull(getClass().getResource(rutaImagen)));
+           this.indiceVacio = indiceVacio;
 
             for (int i = 0; i < 5; ++i) {
                 for (int j = 0; j < 5; ++j) {
@@ -42,6 +50,21 @@ public class Carta {
                 }
             }
         }
+    }
+
+    public int getIndiceVacio()
+    {
+        return indiceVacio;
+    }
+
+    public void setIndiceVacio(int indiceVacio)
+    {
+        this.indiceVacio = indiceVacio;
+    }
+
+    public ImageIcon getTablaImagen()
+    {
+        return tablaImagen;
     }
 
     public boolean[][] getTablaLogica()

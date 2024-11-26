@@ -7,7 +7,7 @@ public class BingoInterTest {
     JPanel panelBingo, panelHistorial, panelBotones;
     JTable tableBingo, tableHistorial;
     JButton botonTira;
-    JLabel labelHistorialVertical, labelUltimaTira;
+    JLabel labelHistorialVertical, labelUltimaTira, labelTira, labelNumeroTira, labelTiraMax;
 
     String[] bingo = {"B", "I", "N", "G", "O"};
     String[] fals = {"-", "-", "-", "-", "-","-","-","-","-","-", "-","-","-","-","-"};
@@ -16,7 +16,6 @@ public class BingoInterTest {
 
     public BingoInterTest()
     {
-        cartaTest = new Carta();
         tombolaTest = new Tombola();
 
         frame = new JFrame("Bingo");
@@ -32,6 +31,7 @@ public class BingoInterTest {
         // Crear tabla de historial
         tableHistorial = new JTable(tombolaTest.getTablaString(), fals);
         tableHistorial.setRowHeight(30); // Ajusta la altura de las filas
+        tableHistorial.setEnabled(false);
         for (int i = 0; i < tableHistorial.getColumnCount(); i++) {
             tableHistorial.getColumnModel().getColumn(i).setPreferredWidth(20); // Ajusta el ancho de las columnas
         }
@@ -41,6 +41,9 @@ public class BingoInterTest {
         botonTira.setPreferredSize(new Dimension(150, 50));
         labelHistorialVertical = new JLabel("Historial Vertical");
         labelUltimaTira = new JLabel("Última Tira");
+        labelTira = new JLabel("Presiona el botón para sacar una bola");
+        labelNumeroTira = new JLabel("Numero de tira");
+        labelTiraMax = new JLabel("Tira maxima");
 
         hacerFrame();
     }
@@ -54,22 +57,38 @@ public class BingoInterTest {
         panelHistorial.setLayout(new BorderLayout());
         panelBotones.setLayout(new GridBagLayout());
 
+        GridBagConstraints gbc3 = new GridBagConstraints();
+        gbc3.gridx = 0;
+        gbc3.gridy = 0;
+        gbc3.insets = new Insets(5,10,5,10);
+        panelBotones.add(labelTira, gbc3);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;  // Centrado en el eje X
-        gbc.gridy = 0;  // Centrado en el eje Y
+        gbc.gridy = 10;  // Centrado en el eje Y
         gbc.insets = new Insets(20, 20, 20, 20); // Añade un espacio alrededor del botón
         panelBotones.add(botonTira, gbc);
 
-        // Agregar tablas al panel correspondiente
-        panelBingo.add(tableBingo, BorderLayout.CENTER);
-        panelHistorial.add(tableHistorial, BorderLayout.SOUTH);
-        panelBotones.add(botonTira);
+        GridBagConstraints gbc1 = new GridBagConstraints();
+        gbc1.gridx = 0;
+        gbc1.gridy = 20;
+        gbc1.insets = new Insets(20,20,20,20);
+        panelBotones.add(labelUltimaTira, gbc1);
 
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.gridx = 0;
+        gbc2.gridy = 30;
+        gbc2.insets = new Insets(20,20,20,20);
+        panelBotones.add(labelHistorialVertical, gbc2);
+
+        // Agregar tablas al panel correspondiente
+
+        panelHistorial.add(new JLabel("Carta historial"), BorderLayout.NORTH);
+        panelHistorial.add(new JScrollPane(tableHistorial) ,BorderLayout.CENTER);
+        panelHistorial.setPreferredSize(new Dimension(frame.getWidth(), 200)); // Altura fija
         // Crear un panel de contenedor para las tablas Bingo y Carta
         JPanel panelIzquierda = new JPanel();
         panelIzquierda.setLayout(new BoxLayout(panelIzquierda, BoxLayout.Y_AXIS));
-        panelIzquierda.add(new JLabel("Bingo"));
-        panelIzquierda.add(new JScrollPane(tableBingo));
         panelIzquierda.add(new JLabel("Carta"));
         panelIzquierda.add(new JScrollPane(tableBingo));
 
@@ -79,8 +98,7 @@ public class BingoInterTest {
         frame.add(panelHistorial, BorderLayout.SOUTH);
 
         frame.setVisible(true);
-        frame.setSize(1000, 700);  // Puedes ajustar el tamaño según sea necesario
+        frame.setSize(1000, 500);  // Puedes ajustar el tamaño según sea necesario
         frame.setLocationRelativeTo(null);
-        frame.setBackground(new Color(67,71,80));
     }
 }

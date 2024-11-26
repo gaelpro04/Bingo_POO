@@ -8,7 +8,7 @@ public class CartaPatrones {
     {
         cartaPatrones = new ArrayList<>(38);
         for (int i = 0;i < 38; ++i) {
-            cartaPatrones.add(new Carta(true));
+            cartaPatrones.add(new Carta(true, "Patrones/patron" + i + ".png", i));
         }
         generarPatrones();
     }
