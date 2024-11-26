@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 //La clase hereda a TablaTombola
 public class Tombola extends TablaTombola{
@@ -63,5 +64,10 @@ public class Tombola extends TablaTombola{
     public boolean comprobarEspacios()
     {
         return numeroTira.comprobarEspacios();
+    }
+
+    public LinkedHashSet<Integer> getNumeroYaTirados()
+    {
+        return numeroTira.getNumerosYaTirados();
     }
 }

@@ -1,8 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.awt.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class Bingo implements Juego {
 
@@ -12,11 +12,12 @@ public class Bingo implements Juego {
     private CartaPatrones cartaPatrones;
     private Carta cartaPatronSeleccionada;
     private boolean bandera;
+    private int numeroBola;
 
     //ATRIBUTOS DE INTERFAZ JUEGO
     private JFrame frame;
     private JPanel panelBingo, panelHistorial, panelBotones, panelBotonesCen, panelBotonesInf, panelBotonesSup, panelPrincipal;
-    private JPanel panelBotonesSupIzq, panelBotonesSupDer;
+    private JPanel panelBotonesSupIzq, panelBotonesSupCen, panelBotonesSupDer;
     private JTable tableBingo, tableHistorial;
     private JButton botonTira;
     private JLabel labelHistoriaVertical, labelUltimaTiraCont, labelTira, labelUltimaTira, labelNombre, labelNumTiras;
@@ -37,6 +38,7 @@ public class Bingo implements Juego {
         bandera = false;
         tombola = new Tombola();
         cartaPatrones = new CartaPatrones();
+        numeroBola = -1;
 
         hacerFrameTemp();
     }
@@ -76,15 +78,15 @@ public class Bingo implements Juego {
         panelBotonesCen = new JPanel();
         panelBotonesInf = new JPanel();
         panelBotonesSup = new JPanel();
-        panelBotonesSupDer = new JPanel();
+        panelBotonesSupCen = new JPanel();
         panelBotonesSupIzq = new JPanel();
+        panelBotonesSupDer = new JPanel();
         panelPrincipal = new JPanel();
         botonTira = new JButton("Tira");
         labelHistoriaVertical = new JLabel("Historial vertical");
         labelUltimaTira = new JLabel("Bola actual: ");
         labelUltimaTiraCont = new JLabel("-ultima tira-");
         labelTira = new JLabel("Presiona el botón para sacar una bola");
-        labelPatron = new JLabel(cartaPatronSeleccionada.getTablaImagen());
         labelNombre = new JLabel(jugador.getNombre());
         labelNumTiras = new JLabel("1");
         labelNumMaxTiras = new JLabel("20");
@@ -100,18 +102,21 @@ public class Bingo implements Juego {
         panelBotonesCen.setLayout(new GridBagLayout());
         panelBotonesSup.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
         panelBotonesSupIzq.setLayout(new FlowLayout(FlowLayout.RIGHT,10,5));
-        panelBotonesSupDer.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
+        panelBotonesSupCen.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
+        panelBotonesSupDer.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
         panelBotonesInf.setLayout(new FlowLayout(FlowLayout.CENTER, 10,5));
 
         tableBingo = new JTable(jugador.getCartaJugador().getTablaString(), bingo);
         tableBingo.setEnabled(false);
         tableBingo.setRowHeight(40);
+        configurarRenderizadorTB();
 
         panelBingo.add(new JScrollPane(tableBingo));
 
         tableHistorial = new JTable(tombola.getTablaString(), titleColumHistorial);
         tableHistorial.setRowHeight(30);
         tableHistorial.setEnabled(false);
+        configurarRenderizadorTH();
 
         panelHistorial.add(new JScrollPane(tableHistorial), BorderLayout.CENTER);
         panelHistorial.setPreferredSize(new Dimension(frame.getWidth(), 200));
@@ -123,6 +128,7 @@ public class Bingo implements Juego {
         panelBotonesCen.add(labelTira, gbc);
 
         botonTira.setPreferredSize(new Dimension(100,50));
+        botonTira.addActionListener(tira -> tirar());
         gbc.gridx = 0;
         gbc.gridy = 10;
         panelBotonesCen.add(botonTira, gbc);
@@ -134,8 +140,6 @@ public class Bingo implements Juego {
         labelUltimaTiraCont.setBackground(Color.WHITE);
         labelUltimaTiraCont.setOpaque(true);
         labelUltimaTiraCont.setPreferredSize(new Dimension(50,20));
-
-        labelPatron.setPreferredSize(new Dimension(20,20));
 
         labelNumTiras.setBackground(Color.WHITE);
         labelNumTiras.setOpaque(true);
@@ -153,15 +157,26 @@ public class Bingo implements Juego {
         panelBotonesSupIzq.add(new JLabel("Numero de tira:"), FlowLayout.LEFT);
         panelBotonesSupIzq.add(labelNombre, FlowLayout.LEFT);
 
+        panelBotonesSupCen.setOpaque(true);
+        panelBotonesSupCen.setBorder(new LineBorder(new Color(205, 205, 205),1));
+        panelBotonesSupCen.add(labelNumMaxTiras);
+        panelBotonesSupCen.add(new JLabel("Tiras máximas: "), FlowLayout.LEFT);
+
+
+        ImageIcon originalIcon = new ImageIcon(cartaPatronSeleccionada.getRutaImagen());
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        labelPatron = new JLabel(resizedIcon);
         panelBotonesSupDer.setOpaque(true);
         panelBotonesSupDer.setBorder(new LineBorder(new Color(205, 205, 205),1));
-        panelBotonesSupDer.add(labelNumMaxTiras);
-        panelBotonesSupDer.add(labelPatron, FlowLayout.LEFT);
-        panelBotonesSupDer.add(new JLabel("Tiras máximas: "), FlowLayout.LEFT);
+        panelBotonesSupDer.add(labelPatron);
 
         panelBotonesSup.setOpaque(true);
         panelBotonesSup.setBorder(new LineBorder(new Color(205, 205, 205),1));
         panelBotonesSup.add(panelBotonesSupIzq);
+        panelBotonesSup.add(panelBotonesSupCen);
         panelBotonesSup.add(panelBotonesSupDer);
 
         panelBotones.add(panelBotonesSup, BorderLayout.NORTH);
@@ -177,7 +192,6 @@ public class Bingo implements Juego {
         frame.setVisible(true);
         frame.setSize(1000,500);
         frame.setLocationRelativeTo(null);
-
     }
 
     private void hacerFramePatron()
@@ -214,6 +228,53 @@ public class Bingo implements Juego {
         frameMenu.setVisible(true);
     }
 
+    private void configurarRenderizadorTB()
+    {
+        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                // Personalizar celdas específicas
+                if (!jugador.getCartaJugador().getTablaLogica()[row][column]) {
+                    cell.setBackground(new Color(59,131,189));
+                } else {
+                    cell.setBackground(Color.WHITE);
+                }
+
+                return cell;
+            }
+        };
+        for (int i = 0; i < tableBingo.getColumnCount(); i++) {
+            tableBingo.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
+    }
+
+    private void configurarRenderizadorTH()
+    {
+        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if ((int) tombola.getTablaString()[row][column] == numeroBola || tombola.getNumeroYaTirados().contains((int) value)) {
+                    cell.setBackground(new Color(255,105,97));
+                } else {
+                    cell.setBackground(Color.WHITE);
+                }
+
+                return cell;
+            }
+        };
+        for (int i = 0; i < tableHistorial.getColumnCount(); i++) {
+            tableHistorial.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
+    }
+
     private void lecturaNombre()
     {
         jugador = new Jugador(lecturaNombre.getText());
@@ -229,36 +290,23 @@ public class Bingo implements Juego {
         jugar();
     }
 
-    /**
-     * Método que despliega menú para seleccionar el patrón del bingo
-     * @return
-     */
-    private Carta seleccionarPatronCarta()
+    private void tirar()
     {
-        ArrayList<Carta> patronesCartas = cartaPatrones.getCartaPatrones();
-        Scanner sc = new Scanner(System.in);
-        int indice;
+        if (tombola.comprobarEspacios()) {
+            numeroBola = tombola.tirarNumero();
+            tableHistorial.repaint();
+            tableHistorial.revalidate();
+            if (verificarBola(numeroBola, jugador.getCartaJugador())) {
+                colocarBola(numeroBola, jugador.getCartaJugador());
+                if (bingo(cartaPatronSeleccionada, jugador.getCartaJugador())) {
 
-        for (int i = 0; i < patronesCartas.size(); ++i) {
-            Carta cartaPatron = patronesCartas.get(i);
-            System.out.println("[" + i + "]==================\n");
-            cartaPatron.mostrarCartaLogica();
+                }
+            }
         }
-
-        do {
-            System.out.println("Elige el patron de la carta para jugar");
-             indice = sc.nextInt();
-
-             if (indice < 0 || indice > 38) {
-                 System.out.println("Debes ingresar un indice correcto");
-             }
-
-        } while (indice < 0 || indice > 38);
-
-        int indicePatron = indice;
-
-        return cartaPatrones.getCartaPatrones().get(indice);
     }
+
+
+
 
     /**
      * Método que determinar si una carta de bingo efectivamente hizo bingo
@@ -304,18 +352,13 @@ public class Bingo implements Juego {
     private void colocarBola(int bola, Carta cartaJugador)
     {
         cartaJugador.ocuparElemento(bola);
+        tableBingo.repaint();
+        tableBingo.revalidate();
     }
 
     @Override
     public void jugar()
     {
         hacerFrame();
-        cartaPatronSeleccionada.mostrarCartaLogica();
-        boolean noTermino = true;
-        Scanner res = new Scanner(System.in);
-        int numeroBola = 0;
-
-        Carta cartaJugador = jugador.getCartaJugador();
-        System.out.println("ARRE");
     }
 }

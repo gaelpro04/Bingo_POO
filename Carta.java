@@ -10,6 +10,7 @@ public class Carta {
     private boolean[][] tablaLogica;
     private ImageIcon tablaImagen;
     private int indiceVacio;
+    private String rutaImagen;
 
 
     /**
@@ -21,13 +22,16 @@ public class Carta {
         tablaLogica = new boolean[5][5];
         tablaImagen = null;
         indiceVacio = -1;
+        rutaImagen = null;
 
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 if (i == 2 && j == 2) {
                     tablaLogica[i][j] = false;
+                } else {
+                    tablaLogica[i][j] = true;
                 }
-                tablaLogica[i][j] = true;
+
             }
         }
         generarNumerosTabla();
@@ -43,13 +47,27 @@ public class Carta {
            tablaLogica = new boolean[5][5];
            tablaImagen = new ImageIcon(Objects.requireNonNull(getClass().getResource(rutaImagen)));
            this.indiceVacio = indiceVacio;
+           this.rutaImagen = rutaImagen;
 
             for (int i = 0; i < 5; ++i) {
                 for (int j = 0; j < 5; ++j) {
-                    tablaLogica[i][j] = true;
+                    if (i == 2 && j == 2) {
+                        tablaLogica[i][j] = false;
+                    } else {
+                        tablaLogica[i][j] = true;
+                    }
+
                 }
             }
         }
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 
     public int getIndiceVacio()
