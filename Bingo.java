@@ -20,7 +20,7 @@ public class Bingo implements Juego {
     private JTable tableBingo, tableHistorial;
     private JButton botonTira;
     private JLabel labelHistoriaVertical, labelUltimaTiraCont, labelTira, labelUltimaTira, labelNombre, labelNumTiras;
-    private  JLabel labelNumMaxTiras;
+    private  JLabel labelNumMaxTiras, labelPatron;
 
     //ATRIBUTOS DE INTERFAZ TEMP
     private JFrame frameTemp;
@@ -84,6 +84,7 @@ public class Bingo implements Juego {
         labelUltimaTira = new JLabel("Bola actual: ");
         labelUltimaTiraCont = new JLabel("-ultima tira-");
         labelTira = new JLabel("Presiona el botón para sacar una bola");
+        labelPatron = new JLabel(cartaPatronSeleccionada.getTablaImagen());
         labelNombre = new JLabel(jugador.getNombre());
         labelNumTiras = new JLabel("1");
         labelNumMaxTiras = new JLabel("20");
@@ -134,6 +135,8 @@ public class Bingo implements Juego {
         labelUltimaTiraCont.setOpaque(true);
         labelUltimaTiraCont.setPreferredSize(new Dimension(50,20));
 
+        labelPatron.setPreferredSize(new Dimension(20,20));
+
         labelNumTiras.setBackground(Color.WHITE);
         labelNumTiras.setOpaque(true);
         labelNumTiras.setPreferredSize(new Dimension(50, 20));
@@ -153,6 +156,7 @@ public class Bingo implements Juego {
         panelBotonesSupDer.setOpaque(true);
         panelBotonesSupDer.setBorder(new LineBorder(new Color(205, 205, 205),1));
         panelBotonesSupDer.add(labelNumMaxTiras);
+        panelBotonesSupDer.add(labelPatron, FlowLayout.LEFT);
         panelBotonesSupDer.add(new JLabel("Tiras máximas: "), FlowLayout.LEFT);
 
         panelBotonesSup.setOpaque(true);
