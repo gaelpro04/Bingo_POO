@@ -31,7 +31,7 @@ public class TablaTombola {
      */
     public Object[][] getTablaString()
     {
-        Object[][] datos = new Object[5][15];
+        Object[][] datos = new Object[5][16];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 15; j++) {
                 datos[i][j] = tabla[i][j];
