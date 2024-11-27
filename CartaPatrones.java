@@ -251,25 +251,4 @@ public class CartaPatrones {
     {
         return cartaPatrones;
     }
-
-    public int obtenerCantidadFalse(int indice)
-    {
-        boolean[][] cartaPatron = cartaPatrones.get(indice).getTablaLogica();
-        int cantidadElementosFalse = 0;
-        for (int i = 0;i < 5; ++i) {
-            for (int j = 0; j < 5; ++j) {
-                if (!cartaPatron[i][j]) {
-                    ++cantidadElementosFalse;
-                }
-            }
-        }
-        return cantidadElementosFalse;
-    }
-
-
-
-    public static void mai1n(String[] args) {
-
-        new CartaPatrones().mostrarPatron();
-    }
 }

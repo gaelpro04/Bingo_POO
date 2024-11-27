@@ -90,11 +90,6 @@ public class Carta {
         return tablaLogica;
     }
 
-    public int[][] getTablaNumerica()
-    {
-        return tabla;
-    }
-
     public Object[][] getTablaString()
     {
         Object[][] datos = new Object[tabla.length][tabla[0].length];
@@ -106,7 +101,7 @@ public class Carta {
         return datos;
     }
 
-    public void mostrarCartaBingo()
+    public void mostrarCartaBingoConsola()
     {
         System.out.println("| B | I | N | G | O |");
         for (int i = 0; i < 5; ++i) {
