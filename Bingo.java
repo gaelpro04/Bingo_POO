@@ -13,6 +13,8 @@ public class Bingo implements Juego {
     private Carta cartaPatronSeleccionada;
     private boolean bandera;
     private int numeroBola;
+    private int contTiras;
+    private int maxTiras;
 
     //ATRIBUTOS DE INTERFAZ JUEGO
     private JFrame frame;
@@ -26,6 +28,8 @@ public class Bingo implements Juego {
     //ATRIBUTOS DE INTERFAZ TEMP
     private JFrame frameTemp;
     private JTextField lecturaNombre;
+    private JTextField lecturaMaxTira;
+    private JLabel labelPedirMaxTira;
 
     //ATRIBUTOS DE INTERFAZ MENU PATRONES
     private JFrame frameMenu;
@@ -57,10 +61,17 @@ public class Bingo implements Juego {
         lecturaNombre.setPreferredSize(new Dimension(150,30));
         lecturaNombre.addActionListener(nombre -> lecturaNombre());
 
+        labelPedirMaxTira = new JLabel("Ingresa numero máximo de tiras");
+        lecturaMaxTira = new JTextField();
+        lecturaMaxTira.setPreferredSize(new Dimension(150,30));
+        lecturaMaxTira.addActionListener(nombre -> lecturaMaxTira());
+
         panelTemp.add(labelPedirNombre);
         panelTemp.add(lecturaNombre);
+        panelTemp.add(labelPedirMaxTira);
+        panelTemp.add(lecturaMaxTira);
         frameTemp.add(panelTemp);
-        frameTemp.setSize(400,100);
+        frameTemp.setSize(250,200);
         frameTemp.setLocationRelativeTo(null);
         frameTemp.setVisible(true);
     }
@@ -88,8 +99,8 @@ public class Bingo implements Juego {
         labelUltimaTiraCont = new JLabel("-ultima tira-");
         labelTira = new JLabel("Presiona el botón para sacar una bola");
         labelNombre = new JLabel(jugador.getNombre());
-        labelNumTiras = new JLabel("1");
-        labelNumMaxTiras = new JLabel("20");
+        labelNumTiras = new JLabel("0");
+        labelNumMaxTiras = new JLabel(String.valueOf(maxTiras));
 
         //DESARROLLO DE INTERFAZ
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -135,7 +146,7 @@ public class Bingo implements Juego {
 
         labelHistoriaVertical.setBackground(Color.WHITE);
         labelHistoriaVertical.setOpaque(true);
-        labelHistoriaVertical.setPreferredSize(new Dimension(150,20));
+        labelHistoriaVertical.setPreferredSize(new Dimension(100,20));
 
         labelUltimaTiraCont.setBackground(Color.WHITE);
         labelUltimaTiraCont.setOpaque(true);
@@ -260,9 +271,21 @@ public class Bingo implements Juego {
                                                            boolean isSelected, boolean hasFocus,
                                                            int row, int column) {
                 Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Color color;
+                if (row == 0) {
+                    color = new Color(0,131,189);
+                } else if (row == 1) {
+                    color = new Color(255,105,97);
+                } else if (row == 2) {
+                    color = new Color (157,216,172);
+                } else if (row == 3) {
+                    color = new Color(253,253,150);
+                } else {
+                    color = new Color(204,169,221);
+                }
 
-                if ((int) tombola.getTablaString()[row][column] == numeroBola || tombola.getNumeroYaTirados().contains((int) value)) {
-                    cell.setBackground(new Color(255,105,97));
+                 if ((int) tombola.getTablaString()[row][column] == numeroBola || tombola.getNumeroYaTirados().contains((int) value)) {
+                    cell.setBackground(color);
                 } else {
                     cell.setBackground(Color.WHITE);
                 }
@@ -278,9 +301,27 @@ public class Bingo implements Juego {
     private void lecturaNombre()
     {
         jugador = new Jugador(lecturaNombre.getText());
-        frameTemp.dispose();
-        hacerFramePatron();
+        lecturaNombre.setEnabled(false);
+        if (!lecturaMaxTira.isEnabled() && !lecturaNombre.isEnabled()) {
+            frameTemp.dispose();
+            hacerFramePatron();
+        }
+    }
 
+    private void lecturaMaxTira()
+    {
+
+        try {
+            maxTiras = Integer.parseInt(lecturaMaxTira.getText());
+            lecturaMaxTira.setEnabled(false);
+            if (!lecturaMaxTira.isEnabled() && !lecturaNombre.isEnabled()) {
+                frameTemp.dispose();
+                hacerFramePatron();
+            }
+        } catch (NumberFormatException ex) {
+            labelPedirMaxTira.setText("Ingresa el máximo valido");
+            labelPedirMaxTira.setBackground(Color.RED);
+        }
     }
 
     private void lecturaPatron(int i)
@@ -293,18 +334,56 @@ public class Bingo implements Juego {
     private void tirar()
     {
         if (tombola.comprobarEspacios()) {
+            ++contTiras;
             numeroBola = tombola.tirarNumero();
+            labelNumTiras.setText(String.valueOf(contTiras));
+            labelUltimaTiraCont.setText(String.valueOf(numeroBola));
+            labelHistoriaVertical.setText("");
+            labelHistoriaVertical.setText(historialString());
             tableHistorial.repaint();
             tableHistorial.revalidate();
-            if (verificarBola(numeroBola, jugador.getCartaJugador())) {
-                colocarBola(numeroBola, jugador.getCartaJugador());
-                if (bingo(cartaPatronSeleccionada, jugador.getCartaJugador())) {
+            if (contTiras == maxTiras) {
 
+                labelTira.setText("PERDISTE, ALCANZASTE EL MAXIMO DE TIRAS");
+                labelTira.setFont(new Font("SansSerif", Font.BOLD, 20));
+                panelBotonesCen.removeAll();
+                panelBotonesCen.repaint();
+                panelBotonesCen.revalidate();
+                panelBotonesCen.add(labelTira);
+
+            } else {
+                if (verificarBola(numeroBola, jugador.getCartaJugador())) {
+                    colocarBola(numeroBola, jugador.getCartaJugador());
+                    if (bingo(cartaPatronSeleccionada, jugador.getCartaJugador())) {
+
+                        labelTira.setText("BINGO!!");
+                        labelTira.setFont(new Font("SansSerif", Font.BOLD, 32));
+                        panelBotonesCen.removeAll();
+                        panelBotonesCen.repaint();
+                        panelBotonesCen.revalidate();
+                        panelBotonesCen.add(labelTira);
+
+                    }
                 }
             }
+
         }
     }
 
+    private String historialString() {
+        StringBuilder historial = new StringBuilder();
+        ArrayList<Integer> listaHistorial = new ArrayList<>(tombola.getNumeroYaTirados());
+
+        // Añadir últimos 6 números en orden inverso
+        for (int i = listaHistorial.size() - 1; i >= Math.max(0, listaHistorial.size() - 6); i--) {
+
+            if (i != listaHistorial.size() - 1) {
+                historial.append(listaHistorial.get(i)).append(" ");
+            }
+        }
+
+        return historial.toString().trim(); // Elimina el espacio extra al final
+    }
 
 
 
@@ -327,7 +406,6 @@ public class Bingo implements Juego {
                 }
             }
         }
-        System.out.println(cartaPatron.obtenerCantidadFalses() + " | " + cantidadFalsesJugador);
         return cartaPatron.obtenerCantidadFalses() == cantidadFalsesJugador;
     }
 
