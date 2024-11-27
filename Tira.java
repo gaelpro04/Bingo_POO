@@ -61,6 +61,4 @@ public class Tira {
     {
         return numerosYaTirados;
     }
-
-
 }

@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class TablaTombola {
 
     //Atributo que simula la tabla y otro que podría decirse la parte "lógica" donde
@@ -95,18 +92,6 @@ public class TablaTombola {
                 if (tabla[i][j] == valorBola && tablaLogica[i][j]) {
                     tablaLogica[i][j] = false;
                 }
-            }
-        }
-    }
-
-    /**
-     * Método para restablecer la tabla
-     */
-    public void restablecerTabla()
-    {
-        for (int i = 0; i < 5; ++i) {
-            for (int j = 0; j < 15; ++j) {
-                tablaLogica[i][j] = true;
             }
         }
     }

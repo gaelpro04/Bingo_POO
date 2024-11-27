@@ -20,14 +20,21 @@ public class CartaPatrones {
         for (int i = 0; i < 12; ++i) {
             boolean[][] cartaLogica = cartaPatrones.get(i).getTablaLogica();
 
+            //Si i está en este rango, se generán los patrones verticales, donde por cada
+            //elemento de la columna se cambia a false
             if (i >= 0 && i <= 4) {
                 for (int j = 0; j < 5; ++j) {
                     cartaLogica[j][i] = false;
                 }
+                //Patron diagonal, donde la fila y columna necesita ser igual
+                //para cumpliar con el patrón diagonal
             } else if (i == 5) {
                 for (int j = 0; j < 5; ++j) {
                     cartaLogica[j][j] = false;
                 }
+                //Patrones horizontales, donde es lo mismo que en los verticales,
+                //solamente se cambian los indices, además i se le resta 6 para
+                //que no salga de sus limite
             } else if (i >= 6 && i <= 10) {
                 for (int j = 0; j < 5; ++j) {
                     cartaLogica[i-6][j] = false;
